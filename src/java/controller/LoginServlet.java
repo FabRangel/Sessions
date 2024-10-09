@@ -82,7 +82,10 @@ public class LoginServlet extends HttpServlet {
                 if(BCrypt.checkpw(password, hashPassword)){
                     HttpSession session = request.getSession();
                     session.setAttribute("matricula",matricula);
-                    response.sendRedirect("/http_session/jsp/usuario.jsp");
+                    int sessionDuration = 3*60;
+                    session.setMaxInactiveInterval(sessionDuration);
+                    session.setAttribute("sessionDuration", sessionDuration);
+                    request.getRequestDispatcher("jsp/usuario.jsp").forward(request, response);
                 }else{
                     request.setAttribute("error", "Credenciales incorrectas");
                     request.getRequestDispatcher("/http_session/jsp/login.jsp").forward(request, response);
